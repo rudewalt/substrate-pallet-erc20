@@ -110,7 +110,8 @@ pub mod pallet {
 		#[pallet::weight(<T as pallet::Config>::WeightInfo::transfer())]
 		pub fn transfer(origin: OriginFor<T>, to: T::AccountId, amount: U256) -> DispatchResult {
 			let from = ensure_signed(origin)?;
-			Self::do_transfer(from.clone(), to.clone(), amount)?;
+			Self::do_transfer(from, to, amount)?;
+
 			Ok(())
 		}
 
@@ -123,6 +124,7 @@ pub mod pallet {
 		) -> DispatchResult {
 			let from = ensure_signed(origin)?;
 			<Allowance<T>>::insert(from.clone(), spender.clone(), amount);
+
 			Self::deposit_event(Event::Approval(from, spender, amount));
 			Ok(())
 		}
@@ -187,7 +189,7 @@ pub mod pallet {
 		) -> DispatchResult {
 			let spender = ensure_signed(origin)?;
 			Self::spend_allowance(from.clone(), spender.clone(), amount)?;
-			Self::do_transfer(from.clone(), to, amount)?;
+			Self::do_transfer(from, to, amount)?;
 			Ok(())
 		}
 
