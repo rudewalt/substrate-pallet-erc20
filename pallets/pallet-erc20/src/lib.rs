@@ -115,7 +115,7 @@ pub mod pallet {
 		}
 
 		/// Allow spender to spend amount from origin account balance
-		#[pallet::weight(10_000)]
+		#[pallet::weight(<T as pallet::Config>::WeightInfo::approve())]
 		pub fn approve(
 			origin: OriginFor<T>,
 			spender: T::AccountId,
@@ -237,7 +237,6 @@ pub mod pallet {
 			T::AfterTransfer::after_transfer(None, &owner, amount);
 
 			Self::deposit_event(Event::Burn(owner, amount, total_supply));
-
 			Ok(())
 		}
 	}
